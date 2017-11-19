@@ -7,5 +7,9 @@ struct wpa_params {
      */
     int daemonize;
 
+    /**
+     * wpa_debug_level - Debugging verbosity level (e.g.,  MSG_INFO)
+     */
+    int wpa_debug_level;
     // TODO: finish members left.
 };
