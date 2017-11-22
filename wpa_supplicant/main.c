@@ -1,3 +1,9 @@
+static void wpa_supplicant_fd_workaround(int start)
+{
+#ifdef __linux__
+#endif /* __linux__ */
+}
+
 int main(int argc, char *argv[])
 {
     int c, i;
@@ -14,4 +20,7 @@ int main(int argc, char *argv[])
     iface = ifaces = os_zalloc(sizeof(struct wpa_interface));
     if (iface == NULL)
         return -1;
+    iface_count = 1;
+
+    wpa_supplicant_fd_workaround(1);
 }
