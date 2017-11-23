@@ -1,0 +1,16 @@
+NOTE:
+    when coding this project, meet with c language usage, and note it.
+    const usage:
+        For example:
+        const char *, char const *, char *const;
+            we can understand them by reading it from right to left,
+            and * is equal to "pointer to".
+            So const char * a is equal to " a is a pointer to const char";
+            char const * a is equal to "a is a pointer to const char", as the same with const char *a;
+            char *const a is equal to "a is a const pointer to char "
+
+    EOF usage:
+        #define EOF (-1) /* stdio.h */
+
+    coding summary:
+        when log in one api didnot show on screen, maybe macro isn't enabled.
