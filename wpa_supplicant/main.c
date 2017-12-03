@@ -1,3 +1,7 @@
+#include "../src/utils/common.h"
+#include "../src/utils/includes.h"
+#include <fcntl.h>
+
 static void usage(void)
 {
     int i;
@@ -51,7 +55,6 @@ static void usage(void)
 
 static void wpa_supplicant_fd_workaround(int start)
 {
-#ifdef __linux__
     static int fd[3] = {-1, -1, -1};
     int i;
 
@@ -72,7 +75,6 @@ static void wpa_supplicant_fd_workaround(int start)
                 fd[i] = -1;
         }
     }
-#endif /* __linux__ */
 }
 
 int main(int argc, char *argv[])
@@ -109,5 +111,54 @@ int main(int argc, char *argv[])
             break;
         default:
             usage();
+            exitcode = 0;
+            goto out;
     }
+
+    exitcode = 0;
+    global = wpa_supplicant_init(&params);
+    if (global == NULL) {
+        wpa_printf(MSG_ERROR, "Failed to iniialize wpa_supplicant");
+        exitcode = -1;
+        goto out;
+    } else {
+        wpa_printf(MSG_INFO, "Successfully initizlized wpa_supplicant");
+    }
+
+    for (i = 0; exitcode == 0 && i < iface_count; i++) {
+        struct wpa_supplicant *wpa_s;
+
+        if ((ifaces[i].confname == NULL &&
+             ifaces[i].ctrl_interface == NULL) ||
+            ifaces[i].ifname = NULL) {
+            if (iface_count == 1 && (params.ctrl_interface ||
+                        params.dbus_ctrl_interface))
+                break;
+            usage();
+            exitcode = -1;
+            break;
+        }
+
+        wpa_s = wpa_supplicant_add_iface(global, &iface[i]);
+        if (wpa_s == NULL) {
+            exitcode = -1;
+            break;
+        }
+
+        // TODO: for p2p
+    }
+
+    if (exitcode == 0)
+        exitcode = wpa_supplicant_run(global);
+
+    wpa_supplicant_deinit(global);
+
+out:
+    wpa_supplicant_fd_workaround(0);
+    os_free(ifaces);
+    //TODO
+
+    os_program_deinit();
+
+    return exitcode;
 }

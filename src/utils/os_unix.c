@@ -25,6 +25,11 @@ void * os_zalloc(size_t size)
 
     return ptr;
 }
+
+void os_free(void *ptr)
+{
+    //TODO
+}
 #endif /* WPA_TRACE */
 
 int os_strcmp(const char *str1, const char *str2)
