@@ -7,3 +7,41 @@ const char *wpa_supplicant_license =
 "See README for more details.\n"
 //TODO:for EAP_TLS_OPENSSL
 ;
+
+static wpa_global *wpa_supplicant_init(struct wpa_params *params)
+{
+    struct wpa_global *global;
+    int ret, i;
+
+    if (params == NULL)
+        return NULL;
+
+#ifdef CONFIG_DRIVER_NDIS
+    {
+        void driver_ndis_init_ops(void);
+        driver_ndis_init_ops(); //TODO
+    }
+#endif
+
+    ret = eap_register_methods(); //TODO
+    if (ret) {
+        wpa_printf(MSG_ERROR, "Failed to register EAP methods");
+        if (ret == -2)
+            wpa_printf(MSG_ERROR, "Two or more EAP methods used the same EAP type.");
+
+        return NULL;
+    }
+
+    global = os_zalloc(sizeof(struct wpa_global));
+    if (global == NULL)
+        return NULL;
+
+    // TODO init the global structure
+    if (eloop_init()) {
+        wpa_printf(MSG_ERROR, "Failed to initialize event loop");
+        wpa_supplicant_deinit(global);
+        return NULL;
+    }
+
+    random_init(params->entropy_file);
+}

@@ -6,3 +6,9 @@ struct wpa_driver_ops *wpa_drivers[] =
 #endif /* CONFIG_DRIVER_TEST */
     NULL
 };
+
+
+void driver_ndis_init_ops(void)
+{
+    //TODO
+}
