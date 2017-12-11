@@ -44,4 +44,10 @@ static wpa_global *wpa_supplicant_init(struct wpa_params *params)
     }
 
     random_init(params->entropy_file);
+
+    global->ctrl_iface = wpa_supplicant_global_ctrl_iface_init(global);
+    if (global->ctrl_iface == NULL) {
+        wpa_supplicant_deinit(global);
+        return NULL;
+    }
 }

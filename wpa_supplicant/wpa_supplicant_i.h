@@ -11,6 +11,13 @@ struct wpa_params {
      * wpa_debug_level - Debugging verbosity level (e.g.,  MSG_INFO)
      */
     int wpa_debug_level;
+
+
+    /*
+     * ctrl_interface - Global ctrl_iface path/parameter
+     */
+    char *ctrl_interface;
+
     // TODO: finish members left.
 };
 
@@ -29,4 +36,18 @@ struct wpa_interface {
      * receiving of EAPOL frames from an additional interface.
      */
     const char *bridge_ifname;
+};
+
+
+/*
+ * struct wpa_global - Internal, global data for all %wpa_supplicant interfaces
+ *
+ * This structure is initialized by calling wpa_supplicant_init() when starting
+ * %wpa_supplicant.
+ */
+struct wpa_global {
+    struct wpa_supplicant *ifaces;;
+    struct wpa_params params;
+    struct ctrl_iface_global_priv *ctrl_iface;
+    void **drv_priv;
 };
